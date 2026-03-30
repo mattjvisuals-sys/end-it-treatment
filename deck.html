@@ -491,12 +491,13 @@
       height: auto;
       flex-shrink: 0;
     }
-    /* All images — full width, generous fixed height, cover */
+    /* All images — natural aspect ratio, no cropping */
     .split__image img {
       width: 100%;
-      height: 45vw;
-      min-height: 170px;
-      object-fit: cover;
+      height: auto;
+      min-height: 200px;
+      object-fit: contain;
+      background: #0a0a0a;
     }
     /* Dual stacked images */
     .split__image--dual {
@@ -506,16 +507,16 @@
     }
     .split__image--dual img {
       width: 100%;
-      height: 55vw;
+      height: auto;
       min-height: 200px;
-      object-fit: cover;
+      object-fit: contain;
+      background: #0a0a0a;
       flex: none;
     }
-    /* Portrait images get more height so faces aren't cut */
+    /* Portrait images — show full */
     .img--portrait {
-      height: 75vw !important;
-      min-height: 280px !important;
-      object-position: top center;
+      object-fit: contain !important;
+      background: #111 !important;
     }
     .split__text {
       width: 100%;
