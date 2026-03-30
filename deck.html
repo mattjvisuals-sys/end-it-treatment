@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>END IT — Exploiter (SYBUA) | Treatment Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    background: #0a0a0a;
+    color: #e8e8e8;
+    font-family: 'Inter', -apple-system, Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { display: block; max-width: 100%; height: auto; }
+  h1, h2, h3, h4 {
+    font-family: 'Oswald', Impact, sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+  }
+
+  /* ── SLIDE ENGINE ──────────────────────────────────── */
+  .deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    overflow: hidden;
+  }
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ── NAVIGATION ────────────────────────────────────── */
+  .nav {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+  .nav__counter {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    color: #999;
+  }
+  .nav__btn {
+    width: 56px;
+    height: 56px;
+    border: 2px solid #e63232;
+    background: rgba(10,10,10,0.9);
+    color: #e63232;
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+    border-radius: 50%;
+  }
+  .nav__btn:hover { background: #e63232; color: #fff; }
+
+  /* ── MOBILE-ONLY ELEMENTS (hidden on desktop) ───────── */
+  .side-arrow {
+    display: none;
+  }
+  .mobile-counter {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    text-align: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    color: #fff;
+    background: rgba(10,10,10,0.85);
+    border-bottom: 2px solid #e63232;
+    padding: 0.5rem 1rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* Progress bar */
+  .progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63232;
+    z-index: 100;
+    transition: width 0.4s ease;
+  }
+
+  /* ── COMMON ELEMENTS ───────────────────────────────── */
+  .label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #e63232;
+    font-weight: 700;
+  }
+  .slide__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+  }
+  .slide__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .slide__content {
+    position: relative;
+    z-index: 2;
+    padding: 5rem 8%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 100%;
+    height: 100%;
+  }
+  .slide__content--center {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .slide__content--split {
+    flex-direction: row;
+    padding: 0;
+  }
+
+  /* Split layout */
+  .split__image {
+    width: 50%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .split__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .split__image--dual {
+    display: flex;
+    flex-direction: column;
+  }
+  .split__image--dual img {
+    flex: 1;
+    object-fit: cover;
+  }
+  .split__text {
+    width: 50%;
+    padding: 5rem 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Diagonal slash accents */
+  .slash {
+    position: absolute;
+    width: 120px;
+    height: 600px;
+    background: #e63232;
+    transform: skewX(-12deg);
+    opacity: 0.08;
+    z-index: 1;
+  }
+
+  /* ── SLIDE 1: TITLE ────────────────────────────────── */
+  .s1__badge {
+    display: inline-block;
+    border: 1px solid #e63232;
+    color: #e63232;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 0.4em 1.2em;
+    margin-bottom: 1.5rem;
+    width: fit-content;
+  }
+  .s1__title {
+    font-size: clamp(5rem, 14vw, 12rem);
+    color: #fff;
+    line-height: 0.85;
+    margin-bottom: 0.15em;
+    text-shadow: 4px 4px 0 rgba(230, 50, 50, 0.3);
+  }
+  .s1__subtitle {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(1.6rem, 4vw, 3rem);
+    color: #e63232;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.3em;
+  }
+  .s1__tagline {
+    font-size: 1rem;
+    color: #666;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .s1__meta {
+    margin-top: 3rem;
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+  .s1__meta-item { display: flex; flex-direction: column; gap: 0.2rem; }
+  .s1__meta-value {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── SLIDE 2: SYNOPSIS ─────────────────────────────── */
+  .s2__heading {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: #fff;
+    margin-bottom: 1.5rem;
+  }
+  .s2__body {
+    max-width: 700px;
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    line-height: 1.9;
+    color: #ccc;
+  }
+  .s2__highlight {
+    display: block;
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    color: #e63232;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+  }
+  .s2__bar {
+    width: 60px;
+    height: 3px;
+    background: #e63232;
+    margin-bottom: 2rem;
+  }
+
+  /* ── ACT SLIDES ────────────────────────────────────── */
+  .act__number {
+    font-family: 'Oswald', sans-serif;
+    font-size: 6rem;
+    font-weight: 700;
+    color: rgba(230, 50, 50, 0.1);
+    line-height: 1;
+    margin-bottom: -0.6rem;
+  }
+  .act__label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #e63232;
+    margin-bottom: 0.6rem;
+  }
+  .act__title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: #fff;
+    margin-bottom: 0.3em;
+  }
+  .act__hook {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    color: #e63232;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1.5rem;
+  }
+  .act__body {
+    font-size: 0.95rem;
+    color: #bbb;
+    line-height: 1.85;
+    max-width: 520px;
+  }
+  .act__body strong { color: #fff; font-weight: 600; }
+
+  /* ── MOOD BOARD SLIDE ──────────────────────────────── */
+  .mood__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    width: 100%;
+    max-width: 1100px;
+    margin-top: 2rem;
+  }
+  .mood__grid img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+  .mood__tone {
+    margin-top: 2rem;
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    color: #666;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .mood__tone span { color: #e63232; }
+
+  /* ── CONTACT SLIDE ─────────────────────────────────── */
+  .contact__heading {
+    font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+    color: #fff;
+    margin-bottom: 0.2em;
+  }
+  .contact__director {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    color: #e63232;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+  .contact__reel {
+    display: inline-block;
+    border: 2px solid #e63232;
+    color: #e63232;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.8em 2.5em;
+    margin-bottom: 2.5rem;
+    transition: background 0.3s, color 0.3s;
+  }
+  .contact__reel:hover { background: #e63232; color: #fff; }
+  .contact__info {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    font-size: 1rem;
+    color: #ccc;
+  }
+  .contact__info a {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .contact__info a:hover { color: #e63232; }
+  .contact__footer {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #333;
+  }
+
+  /* ══════════════════════════════════════════════════════
+     MOBILE — COMPLETE OVERHAUL
+     ══════════════════════════════════════════════════════ */
+  @media (max-width: 900px) {
+
+    /* Use real available height on iOS */
+    html { height: -webkit-fill-available; }
+    body  { height: 100vh; height: -webkit-fill-available; }
+    .deck { height: 100vh; height: -webkit-fill-available; }
+
+    /* ── SIDE ARROWS — always visible on screen edges ── */
+    .side-arrow {
+      display: flex;
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 9999;
+      width: 44px;
+      height: 80px;
+      align-items: center;
+      justify-content: center;
+      background: #e63232;
+      color: #fff;
+      font-size: 1.5rem;
+      border: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 2px 12px rgba(230,50,50,0.5);
+    }
+    .side-arrow--prev {
+      left: 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .side-arrow--next {
+      right: 0;
+      border-radius: 8px 0 0 8px;
+    }
+
+    /* Hide bottom nav on mobile — side arrows replace it */
+    .nav { display: none; }
+
+    /* ── MOBILE COUNTER (top of screen) ── */
+    .mobile-counter {
+      display: block;
+    }
+
+    /* ── HERO — show full band image ── */
+    .slide[data-slide="1"] .slide__bg {
+      background-position: top center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-color: #0a0a0a;
+    }
+    .slide[data-slide="1"] .slide__overlay {
+      background: linear-gradient(
+        180deg,
+        rgba(10,10,10,0) 0%,
+        rgba(10,10,10,0.4) 40%,
+        rgba(10,10,10,0.95) 70%,
+        rgba(10,10,10,1) 100%
+      ) !important;
+    }
+    .slide[data-slide="1"] .slide__content {
+      justify-content: flex-end;
+      padding: 2rem 6% 3rem;
+    }
+    .s1__title { font-size: clamp(3.5rem, 16vw, 6rem); }
+    .s1__meta { gap: 1rem; margin-top: 1.2rem; }
+    .s1__meta-item { min-width: 40%; }
+
+    /* ── GENERAL SLIDE CONTENT — unlock from viewport height ── */
+    .slide__content {
+      padding: 2.5rem 6% 2rem;
+      height: auto;
+      min-height: 100%;
+    }
+    .slide__content--center {
+      padding: 2.5rem 6% 2rem;
+      height: auto;
+      min-height: 100%;
+    }
+
+    /* ── SPLIT LAYOUTS — stack vertical, images get real space ── */
+    .slide__content--split {
+      flex-direction: column;
+      min-height: auto;
+      height: auto;
+      padding: 0;
+      overflow: visible;
+    }
+    /* Ensure the slide wrapper doesn't clip the stacked content */
+    .slide.active .slide__content--split {
+      display: flex;
+    }
+    .split__image {
+      width: 100%;
+      height: auto;
+      flex-shrink: 0;
+    }
+    /* Single images — generous height */
+    .split__image img {
+      width: 100%;
+      height: auto;
+      max-height: 55vw;
+      object-fit: cover;
+    }
+    /* Dual stacked images — each gets good space */
+    .split__image--dual {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .split__image--dual img {
+      width: 100%;
+      height: auto;
+      max-height: 50vw;
+      min-height: 160px;
+      object-fit: cover;
+      flex: none;
+    }
+    .split__text {
+      width: 100%;
+      height: auto;
+      padding: 1.5rem 6% 2rem;
+    }
+    .act__number { font-size: 2.5rem; margin-bottom: -0.3rem; }
+    .act__body { font-size: 0.88rem; line-height: 1.75; }
+    .act__hook { margin-bottom: 1rem; }
+
+    /* ── MOOD BOARD ── */
+    .mood__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+    }
+    .mood__grid img { height: 28vw; min-height: 110px; }
+    .mood__tone { font-size: 0.85rem; margin-top: 1.5rem; }
+
+    /* ── SYNOPSIS ── */
+    .s2__body { font-size: 1rem; }
+
+    /* ── CONTACT ── */
+    .contact__footer {
+      position: relative;
+      bottom: auto;
+      left: auto;
+      transform: none;
+      margin-top: 2rem;
+    }
+  }
+
+  /* ── Extra small screens ── */
+  @media (max-width: 400px) {
+    .s1__title { font-size: 3rem; }
+    .s1__subtitle { font-size: 1.2rem; }
+    .s1__tagline { font-size: 0.75rem; }
+    .act__body { font-size: 0.82rem; }
+    .split__image--dual img { min-height: 130px; }
+    .side-arrow { width: 38px; height: 65px; font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 1 — TITLE
+     ═══════════════════════════════════════════════════════ -->
+<div class="deck" id="deck">
+
+<div class="slide active" data-slide="1">
+  <div class="slide__bg" style="background-image: url('./images/band-logo.webp'); filter: brightness(0.3) saturate(0.7);"></div>
+  <div class="slide__overlay" style="background: linear-gradient(180deg, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.7) 50%, rgba(10,10,10,0.95) 100%);"></div>
+  <div class="slash" style="top:-100px; right:8%;"></div>
+  <div class="slash" style="top:50px; right:4%; width:60px; opacity:0.05;"></div>
+  <div class="slide__content">
+    <div class="s1__badge">Flatspot Records</div>
+    <h1 class="s1__title">END IT</h1>
+    <div class="s1__subtitle">Exploiter (SYBUA)</div>
+    <div class="s1__tagline">Music Video Treatment</div>
+    <div class="s1__meta">
+      <div class="s1__meta-item">
+        <span class="label">Artist</span>
+        <span class="s1__meta-value">End It</span>
+      </div>
+      <div class="s1__meta-item">
+        <span class="label">Origin</span>
+        <span class="s1__meta-value">Baltimore, MD</span>
+      </div>
+      <div class="s1__meta-item">
+        <span class="label">Genre</span>
+        <span class="s1__meta-value">Hardcore</span>
+      </div>
+      <div class="s1__meta-item">
+        <span class="label">Director</span>
+        <span class="s1__meta-value">Jeff Landreville</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 2 — SYNOPSIS
+     ═══════════════════════════════════════════════════════ -->
+<div class="slide" data-slide="2">
+  <div class="slide__overlay" style="background: #0a0a0a;"></div>
+  <div class="slash" style="bottom:-200px; right:10%; opacity:0.04;"></div>
+  <div class="slide__content" style="justify-content: center;">
+    <div class="s2__bar"></div>
+    <div class="label" style="margin-bottom: 0.8rem;">Synopsis</div>
+    <h2 class="s2__heading">The Concept</h2>
+    <p class="s2__body">
+      A narrative-driven music video for the explosive Baltimore-based hardcore band <strong style="color:#fff;">END IT</strong> — blending comedy, action, skateboarding, and hard riffs into a story that's never been done in the hardcore genre.
+      <span class="s2__highlight">From Twitter Fingers to Real-World Consequences.</span>
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 3 — ACT 1: THE CLAIM
+     ═══════════════════════════════════════════════════════ -->
+<div class="slide" data-slide="3">
+  <div class="slide__content slide__content--split">
+    <div class="split__image split__image--dual">
+      <img src="./images/couch-friends.png" alt="Friends watching skate videos">
+      <img src="./images/conspiracy-wall.webp" alt="Conspiracy wall — spiraling out">
+    </div>
+    <div class="split__text">
+      <div class="act__number">01</div>
+      <div class="act__label">Act One</div>
+      <h2 class="act__title">The Claim</h2>
+      <div class="act__hook">"I know that guy."</div>
+      <p class="act__body">
+        Two friends — <strong>John and Mark</strong> — are watching recap videos of a famous skateboarder. Mark claims to be friends with the athlete and attempts to call him — only to get sent straight to voicemail.
+        <br><br>
+        Instead of taking the L, <strong>Mark spirals</strong> — building conspiracies that the skateboarder can't actually land his tricks. He takes to Twitter, slandering the skater's reputation while John eggs him on.
+        <br><br>
+        But there are <strong>repercussions</strong> to running your mouth online.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 4 — ACT 2: THE HUNT
+     ═══════════════════════════════════════════════════════ -->
+<div class="slide" data-slide="4">
+  <div class="slide__content slide__content--split">
+    <div class="split__text">
+      <div class="act__number">02</div>
+      <div class="act__label">Act Two</div>
+      <h2 class="act__title">The Hunt</h2>
+      <div class="act__hook">Word gets back.</div>
+      <p class="act__body">
+        The skater sees the tweets. He doesn't respond online — he picks up the phone and calls <strong>END IT</strong> in a mob-boss style fashion to <strong>"resolve the issue."</strong>
+        <br><br>
+        Cut to John and Mark walking through the neighborhood — until <strong>a black van barrels through the streets</strong> hunting them down. The chase is frantic, cinematic, and inevitable.
+        <br><br>
+        <strong>They're captured.</strong>
+      </p>
+    </div>
+    <div class="split__image split__image--dual">
+      <img src="./images/van-chase.png" alt="Black van tearing through the streets">
+      <img src="./images/sopranos-van.jpg" alt="The crew arrives — mob style">
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 5 — ACT 3: THE RECKONING
+     ═══════════════════════════════════════════════════════ -->
+<div class="slide" data-slide="5">
+  <div class="slide__content slide__content--split">
+    <div class="split__image split__image--dual">
+      <img src="./images/duct-tape.jpg" alt="Tied to a chair — no way out">
+      <img src="./images/skater-birdhouse.jpg" alt="Skater proving his skills">
+    </div>
+    <div class="split__text">
+      <div class="act__number">03</div>
+      <div class="act__label">Act Three</div>
+      <h2 class="act__title">The Reckoning</h2>
+      <div class="act__hook">Prove it or shut up.</div>
+      <p class="act__body">
+        Mark wakes up blindfolded, <strong>tied to a chair</strong> inside the skater's private facility.
+        <br><br>
+        The skater lands trick after trick while <strong>END IT plays out the song</strong> in various spots throughout the space — raw, aggressive, in-your-face.
+        <br><br>
+        But the final trick? <strong>He doesn't land it.</strong> The conspiracy was true all along. The singer from END IT ends the scene with a <strong>POV knockout punch straight to camera</strong>.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 6 — MOOD BOARD
+     ═══════════════════════════════════════════════════════ -->
+<div class="slide" data-slide="6">
+  <div class="slide__overlay" style="background: #0d0d0d;"></div>
+  <div class="slide__content slide__content--center">
+    <div class="label" style="margin-bottom: 0.6rem;">Visual References</div>
+    <h2 style="font-size: clamp(2rem,4vw,3rem); color:#fff; margin-bottom: 0.5rem;">Mood Board</h2>
+    <div class="mood__grid">
+      <img src="./images/Vocalist.jpg" alt="End It vocalist performing">
+      <img src="./images/phone-booth.jpg" alt="Phone call scene reference">
+      <img src="./images/van-storefront.jpg" alt="Black van — the hunt">
+      <img src="./images/band-halfpipe.png" alt="Band performing on half-pipe">
+    </div>
+    <p class="mood__tone"><span>The Sopranos</span> meets <span>Jackass</span> — dark comedy with real stakes</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 7 — CONTACT
+     ═══════════════════════════════════════════════════════ -->
+<div class="slide" data-slide="7">
+  <div class="slide__bg" style="background-image: url('./images/band-halfpipe.png'); filter: brightness(0.15) saturate(0.5);"></div>
+  <div class="slide__overlay" style="background: linear-gradient(180deg, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.5) 50%, rgba(10,10,10,0.9) 100%);"></div>
+  <div class="slide__content slide__content--center">
+    <h2 class="contact__heading">Treatment By</h2>
+    <div class="contact__director">Jeff Landreville</div>
+    <a href="#" class="contact__reel">View Director's Reel</a>
+    <ul class="contact__info">
+      <li><a href="tel:+17743605559">(774) 360-5559</a></li>
+      <li><a href="mailto:jslandreville@gmail.com">jslandreville@gmail.com</a></li>
+      <li><a href="https://instagram.com/Just_a_goon" target="_blank">@Just_a_goon</a></li>
+    </ul>
+    <div class="contact__footer">End It &times; Flatspot Records &mdash; Baltimore Hardcore</div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- ── SIDE ARROWS (mobile) ──────────────────────────── -->
+<button class="side-arrow side-arrow--prev" id="sidePrev" aria-label="Previous slide">&#8592;</button>
+<button class="side-arrow side-arrow--next" id="sideNext" aria-label="Next slide">&#8594;</button>
+
+<!-- ── MOBILE COUNTER (top bar) ────────────────────── -->
+<div class="mobile-counter" id="mobileCounter">1 / 7</div>
+
+<!-- ── DESKTOP NAVIGATION ──────────────────────────── -->
+<div class="nav">
+  <button class="nav__btn" id="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="nav__counter" id="counter">1 / 7</span>
+  <button class="nav__btn" id="next" aria-label="Next slide">&#8594;</button>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  const counter = document.getElementById('counter');
+  const mobileCounter = document.getElementById('mobileCounter');
+  const progress = document.getElementById('progress');
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    current = (n + total) % total;
+    slides[current].classList.add('active');
+    const label = (current + 1) + ' / ' + total;
+    counter.textContent = label;
+    mobileCounter.textContent = label;
+    progress.style.width = ((current + 1) / total * 100) + '%';
+    // Scroll active slide to top when switching
+    slides[current].scrollTop = 0;
+  }
+
+  document.getElementById('next').addEventListener('click', () => goTo(current + 1));
+  document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
+  document.getElementById('sideNext').addEventListener('click', () => goTo(current + 1));
+  document.getElementById('sidePrev').addEventListener('click', () => goTo(current - 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+    if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+  });
+
+  // Touch swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? goTo(current + 1) : goTo(current - 1);
+    }
+  });
+
+  // Init progress
+  progress.style.width = (1 / total * 100) + '%';
+})();
+</script>
+
+</body>
+</html>
