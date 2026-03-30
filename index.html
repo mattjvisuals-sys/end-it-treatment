@@ -239,6 +239,13 @@
     transform: scale(1.1);
     box-shadow: 0 0 25px rgba(230, 50, 50, 0.5);
   }
+  .video-pitch__icon:active {
+    background: #e63232;
+    color: #fff;
+    transform: scale(0.9);
+    box-shadow: 0 0 30px rgba(230, 50, 50, 0.7);
+    transition: transform 0.1s;
+  }
   .video-pitch__text {
     font-family: 'Oswald', sans-serif;
     font-size: 1rem;
@@ -446,8 +453,11 @@
     box-shadow: 0 4px 20px rgba(230, 50, 50, 0.4);
   }
   .contact__reel:active {
-    transform: translateY(0) scale(0.97);
-    box-shadow: 0 2px 8px rgba(230, 50, 50, 0.3);
+    background: #e63232;
+    color: #fff;
+    transform: scale(0.93);
+    box-shadow: 0 0 25px rgba(230, 50, 50, 0.6);
+    transition: transform 0.1s, background 0.1s, box-shadow 0.1s;
   }
   .contact__info {
     list-style: none;
