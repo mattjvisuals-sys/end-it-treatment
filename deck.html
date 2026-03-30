@@ -316,15 +316,15 @@
   /* ── MOOD BOARD SLIDE ──────────────────────────────── */
   .mood__grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
     width: 100%;
     max-width: 1100px;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
   }
   .mood__grid img {
     width: 100%;
-    height: 220px;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 2px;
   }
@@ -523,10 +523,10 @@
 
     /* ── MOOD BOARD ── */
     .mood__grid {
-      grid-template-columns: 1fr 1fr;
-      gap: 4px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
     }
-    .mood__grid img { height: 28vw; min-height: 110px; }
+    .mood__grid img { aspect-ratio: 1 / 1; }
     .mood__tone { font-size: 0.85rem; margin-top: 1.5rem; }
 
     /* ── SYNOPSIS ── */
@@ -695,9 +695,17 @@
     <h2 style="font-size: clamp(2rem,4vw,3rem); color:#fff; margin-bottom: 0.5rem;">Mood Board</h2>
     <div class="mood__grid">
       <img src="./images/Vocalist.jpg" alt="End It vocalist performing">
-      <img src="./images/phone-booth.jpg" alt="Phone call scene reference">
-      <img src="./images/van-storefront.jpg" alt="Black van — the hunt">
-      <img src="./images/band-halfpipe.png" alt="Band performing on half-pipe">
+      <img src="./images/couch-friends.png" alt="Friends on the couch">
+      <img src="./images/van-chase.png" alt="Black van chase">
+      <img src="./images/band-logo.webp" alt="End It band photo">
+      <img src="./images/conspiracy-wall.webp" alt="Conspiracy wall">
+      <img src="./images/sopranos-van.jpg" alt="The crew arrives">
+      <img src="./images/band-halfpipe.png" alt="Band on half-pipe">
+      <img src="./images/duct-tape.jpg" alt="Tied to a chair">
+      <img src="./images/skater-birdhouse.jpg" alt="Skater at Birdhouse">
+      <img src="./images/phone-booth.jpg" alt="Phone call reference">
+      <img src="./images/van-storefront.jpg" alt="Black van at storefront">
+      <img src="./images/treatment-thumbnail.png" alt="Treatment thumbnail">
     </div>
     <p class="mood__tone"><span>The Sopranos</span> meets <span>Jackass</span> — dark comedy with real stakes</p>
   </div>
