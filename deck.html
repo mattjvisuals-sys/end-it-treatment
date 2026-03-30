@@ -511,6 +511,12 @@
       object-fit: cover;
       flex: none;
     }
+    /* Portrait images get more height so faces aren't cut */
+    .img--portrait {
+      height: 75vw !important;
+      min-height: 280px !important;
+      object-position: top center;
+    }
     .split__text {
       width: 100%;
       height: auto;
@@ -665,7 +671,7 @@
 <div class="slide" data-slide="5">
   <div class="slide__content slide__content--split">
     <div class="split__image split__image--dual">
-      <img src="./images/duct-tape.jpg" alt="Tied to a chair — no way out" style="object-position: top center;">
+      <img src="./images/duct-tape.jpg" alt="Tied to a chair — no way out" class="img--portrait">
       <img src="./images/skater-birdhouse.jpg" alt="Skater proving his skills">
     </div>
     <div class="split__text">
