@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>END IT — Exploiter (SYBUA) | Production Budget</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: #0a0a0a;
+    color: #e8e8e8;
+    font-family: 'Inter', -apple-system, Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Oswald', Impact, sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+  }
+  a { text-decoration: none; }
+
+  /* ── BACK LINK ─────────────────────────────────────── */
+  .back {
+    position: fixed;
+    top: 1.2rem;
+    left: 1.5rem;
+    z-index: 100;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #888;
+    transition: color 0.2s;
+  }
+  .back:hover { color: #e63232; }
+
+  /* ── HERO ──────────────────────────────────────────── */
+  .hero {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 6rem 6% 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(230,50,50,0.06) 0%, transparent 70%);
+  }
+  .hero__label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #e63232;
+    margin-bottom: 1rem;
+  }
+  .hero__title {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    color: #fff;
+    margin-bottom: 0.3em;
+  }
+  .hero__sub {
+    font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+    color: #888;
+    max-width: 550px;
+    line-height: 1.8;
+  }
+  .hero__total {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .hero__total-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #666;
+  }
+  .hero__total-number {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 700;
+    color: #e63232;
+    line-height: 1;
+  }
+  .hero__total-note {
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 0.3rem;
+  }
+
+  /* ── SECTION ───────────────────────────────────────── */
+  .section {
+    padding: 4rem 6%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .section--full {
+    max-width: 100%;
+    padding: 4rem 6%;
+  }
+  .divider {
+    width: 40px;
+    height: 3px;
+    background: #e63232;
+    margin-bottom: 1.5rem;
+  }
+  .section__label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #e63232;
+    margin-bottom: 0.6rem;
+  }
+  .section__heading {
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    color: #fff;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── BUDGET LINES ──────────────────────────────────── */
+  .budget-group {
+    margin-bottom: 3rem;
+  }
+  .budget-group__title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #e63232;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #1a1a1a;
+    margin-bottom: 0;
+  }
+  .line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #141414;
+  }
+  .line__left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .line__name {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: #ddd;
+  }
+  .line__desc {
+    font-size: 0.75rem;
+    color: #555;
+  }
+  .line__amount {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.03em;
+  }
+  .line--subtotal {
+    border-bottom: 2px solid #222;
+    padding: 1.2rem 0;
+  }
+  .line--subtotal .line__name {
+    font-weight: 600;
+    color: #fff;
+  }
+  .line--subtotal .line__amount {
+    font-size: 1.3rem;
+    color: #e63232;
+  }
+
+  /* ── SPONSOR SECTION ───────────────────────────────── */
+  .sponsor {
+    background: #111;
+    border: 1px solid #1a1a1a;
+    border-radius: 6px;
+    padding: 2.5rem;
+    margin: 3rem auto;
+    max-width: 800px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .sponsor::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #e63232, transparent);
+  }
+  .sponsor__label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #e63232;
+    margin-bottom: 1rem;
+  }
+  .sponsor__brand {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    color: #fff;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+  .sponsor__pitch {
+    font-size: 0.9rem;
+    color: #888;
+    max-width: 500px;
+    margin: 0 auto 2rem;
+    line-height: 1.8;
+  }
+  .sponsor__amount {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    background: rgba(230, 50, 50, 0.08);
+    border: 1px solid rgba(230, 50, 50, 0.2);
+    border-radius: 4px;
+    padding: 1rem 2.5rem;
+  }
+  .sponsor__amount-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #e63232;
+  }
+  .sponsor__amount-number {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #e63232;
+    line-height: 1;
+  }
+
+  /* ── NET TOTAL ─────────────────────────────────────── */
+  .net {
+    padding: 4rem 6%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .net__card {
+    background: #111;
+    border: 1px solid #1a1a1a;
+    border-radius: 6px;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .net__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #1a1a1a;
+  }
+  .net__row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    padding-top: 0.5rem;
+  }
+  .net__row-label {
+    font-size: 0.95rem;
+    color: #888;
+  }
+  .net__row-amount {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .net__row--savings .net__row-amount {
+    color: #4ecb71;
+  }
+  .net__row--total .net__row-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: 700;
+  }
+  .net__row--total .net__row-amount {
+    font-size: 2rem;
+    color: #e63232;
+  }
+  .net__note {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 0.5rem;
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER NOTE ───────────────────────────────────── */
+  .closing {
+    padding: 3rem 6% 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .closing__text {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.8;
+    max-width: 550px;
+    margin: 0 auto 2rem;
+  }
+  .closing__text strong { color: #ccc; font-weight: 600; }
+  .closing__cta {
+    display: inline-block;
+    border: 2px solid #e63232;
+    color: #e63232;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.8em 2.5em;
+    transition: background 0.3s, color 0.3s, transform 0.2s, box-shadow 0.3s;
+  }
+  .closing__cta:hover {
+    background: #e63232;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(230,50,50,0.4);
+  }
+  .closing__cta:active {
+    background: #e63232;
+    color: #fff;
+    transform: scale(0.93);
+    box-shadow: 0 0 25px rgba(230,50,50,0.6);
+    transition: transform 0.1s, background 0.1s, box-shadow 0.1s;
+  }
+
+  .footer-bar {
+    background: #e63232;
+    padding: 1rem 6%;
+    text-align: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.8);
+    margin-top: 3rem;
+  }
+
+  /* ── RESPONSIVE ────────────────────────────────────── */
+  @media (max-width: 600px) {
+    .hero { min-height: 50vh; padding: 5rem 5% 3rem; }
+    .sponsor { margin: 2rem 5%; padding: 2rem 1.5rem; }
+    .net { padding: 3rem 5%; }
+    .net__card { padding: 2rem 1.5rem; }
+    .line { flex-wrap: wrap; gap: 0.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<a href="./index.html" class="back">&larr; Back to Treatment</a>
+
+<!-- ════════════════════════════════════════════════════
+     HERO
+     ════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero__label">End It &times; Flatspot Records</div>
+  <h1 class="hero__title">Production Budget</h1>
+  <p class="hero__sub">
+    A lean, realistic budget built for the modern hardcore music video. Every dollar on screen — no fat, no fluff.
+  </p>
+  <div class="hero__total">
+    <span class="hero__total-label">Total Production Cost</span>
+    <span class="hero__total-number">$5,500</span>
+    <span class="hero__total-note">Before sponsorship</span>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     BUDGET BREAKDOWN
+     ════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="divider"></div>
+  <div class="section__label">Line Items</div>
+  <h2 class="section__heading">Where the Money Goes</h2>
+
+  <!-- PRODUCTION CREW -->
+  <div class="budget-group">
+    <div class="budget-group__title">Production Crew</div>
+    <div class="line">
+      <div class="line__left">
+        <span class="line__name">Director / DP</span>
+        <span class="line__desc">Jeff Landreville — shoot + edit</span>
+      </div>
+      <span class="line__amount">$1,500</span>
+    </div>
+    <div class="line">
+      <div class="line__left">
+        <span class="line__name">Camera Operator / AC</span>
+        <span class="line__desc">Second shooter, B-roll, skate coverage</span>
+      </div>
+      <span class="line__amount">$500</span>
+    </div>
+    <div class="line">
+      <div class="line__left">
+        <span class="line__name">Production Assistant</span>
+        <span class="line__desc">Day-of logistics, grip, setup</span>
+      </div>
+      <span class="line__amount">$200</span>
+    </div>
+  </div>
+
+  <!-- EQUIPMENT & RENTAL -->
+  <div class="budget-group">
+    <div class="budget-group__title">Equipment &amp; Rental</div>
+    <div class="line">
+      <div class="line__left">
+        <span class="line__name">Camera &amp; Lens Package</span>
+        <span class="line__desc">Cinema camera, skate-specific rigs</span>
+      </div>
+      <span class="line__amount">$600</span>
+    </div>
+    <div class="line">
+      <div class="line__left">
+        <span class="line__name">Lighting &amp; Grip</span>
+        <span class="line__desc">LED panels, stands, modifiers</span>
+      </div>
+      <span class="line__amount">$300</span>
+    </div>
+    <div class="line">
+      <div class="line__left">
+        <span class="line__name">Van Rental</span>
+        <span class="line__desc">Black cargo van — the kidnapping hero vehicle</span>
+      </div>
+      <span class="line__amount">$350</span>
+    </div>
+  </div>
+
+  <!-- LOCATION & ART -->
+  <div class="budget-group">
+    <div class="budget-group__title">Location &amp; Art Direction</div>
+    <div class="line">
+      <div class="line__left">
+        <span class="line__name">Skate Facility / Warehouse</span>
+        <span class="line__desc">Private ramp access for Act 3 + band performance</span>
+      </div>
+      <span class="line__amount">$500</span>
+    </div>
+    <div class="line">
+      <div class="line__left">
+        <span class="line__name">Props &amp; Wardrobe</span>
+        <span class="line__desc">Duct tape, blindfold, chair, set dressing</span>
+      </div>
+      <span class="line__amount">$150</span>
+    </div>
+  </div>
+
+  <!-- CASTING & TALENT -->
+  <div class="budget-group">
+    <div class="budget-group__title">Casting &amp; Talent</div>
+    <div class="line">
+      <div class="line__left">
+        <span class="line__name">Skateboarder</span>
+        <span class="line__desc">Featured athlete — tricks + acting</span>
+      </div>
+      <span class="line__amount">$500</span>
+    </div>
+    <div class="line">
+      <div class="line__left">
+        <span class="line__name">Actors (John &amp; Mark)</span>
+        <span class="line__desc">Two leads — couch scene through kidnapping</span>
+      </div>
+      <span class="line__amount">$300</span>
+    </div>
+  </div>
+
+  <!-- POST-PRODUCTION -->
+  <div class="budget-group">
+    <div class="budget-group__title">Post-Production</div>
+    <div class="line">
+      <div class="line__left">
+        <span class="line__name">Editing &amp; Color Grade</span>
+        <span class="line__desc">Final cut, color, delivery</span>
+      </div>
+      <span class="line__amount">$400</span>
+    </div>
+    <div class="line">
+      <div class="line__left">
+        <span class="line__name">Meals &amp; Transport</span>
+        <span class="line__desc">Crew meals, gas, day-of expenses</span>
+      </div>
+      <span class="line__amount">$200</span>
+    </div>
+  </div>
+
+  <!-- SUBTOTAL -->
+  <div class="line line--subtotal">
+    <div class="line__left">
+      <span class="line__name">Production Total</span>
+    </div>
+    <span class="line__amount">$5,500</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     SPONSORSHIP
+     ════════════════════════════════════════════════════ -->
+<div class="sponsor">
+  <div class="sponsor__label">Sponsorship Partner</div>
+  <h2 class="sponsor__brand">VANS</h2>
+  <p class="sponsor__pitch">
+    Skateboarding is core to this video's DNA. A Vans partnership is a natural fit — product placement through the skater's footwear and gear, with organic brand visibility throughout the narrative. We have a direct contact at Vans ready to discuss.
+  </p>
+  <div class="sponsor__amount">
+    <span class="sponsor__amount-label">Proposed Sponsorship</span>
+    <span class="sponsor__amount-number">$2,000</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     NET TOTAL
+     ════════════════════════════════════════════════════ -->
+<div class="net">
+  <div class="divider"></div>
+  <div class="section__label">The Bottom Line</div>
+  <h2 class="section__heading">Net Investment</h2>
+  <div class="net__card">
+    <div class="net__row">
+      <span class="net__row-label">Total Production Budget</span>
+      <span class="net__row-amount">$5,500</span>
+    </div>
+    <div class="net__row net__row--savings">
+      <span class="net__row-label">Vans Sponsorship</span>
+      <span class="net__row-amount">- $2,000</span>
+    </div>
+    <div class="net__row net__row--total">
+      <span class="net__row-label">Label Investment</span>
+      <span class="net__row-amount">$3,500</span>
+    </div>
+  </div>
+  <p class="net__note">
+    A professional, narrative-driven music video for $3,500 out of pocket.<br>
+    That's the cost of doing it right without doing it expensive.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     CLOSING
+     ════════════════════════════════════════════════════ -->
+<div class="closing">
+  <p class="closing__text">
+    This budget reflects what it actually costs to make a <strong>real video</strong> in the hardcore scene today — no studio markups, no agency overhead. Just a focused crew that knows how to get it done.
+  </p>
+  <a href="./index.html" class="closing__cta">Back to Treatment</a>
+</div>
+
+<div class="footer-bar">
+  End It &times; Flatspot Records &mdash; Baltimore Hardcore
+</div>
+
+</body>
+</html>
