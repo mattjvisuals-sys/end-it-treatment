@@ -464,12 +464,12 @@
 
     /* ── GENERAL SLIDE CONTENT — unlock from viewport height ── */
     .slide__content {
-      padding: 2.5rem 6% 2rem;
+      padding: 3.5rem 6% 2rem;
       height: auto;
       min-height: 100%;
     }
     .slide__content--center {
-      padding: 2.5rem 6% 2rem;
+      padding: 3.5rem 6% 2rem;
       height: auto;
       min-height: 100%;
     }
@@ -479,7 +479,7 @@
       flex-direction: column;
       min-height: auto;
       height: auto;
-      padding: 0;
+      padding: 2.5rem 0 0 0;
       overflow: visible;
     }
     /* Ensure the slide wrapper doesn't clip the stacked content */
@@ -491,13 +491,14 @@
       height: auto;
       flex-shrink: 0;
     }
-    /* Single images — show naturally */
+    /* All images — full width, generous fixed height, cover */
     .split__image img {
       width: 100%;
-      height: auto;
+      height: 45vw;
+      min-height: 170px;
       object-fit: cover;
     }
-    /* Dual stacked images — show naturally */
+    /* Dual stacked images */
     .split__image--dual {
       display: flex;
       flex-direction: column;
@@ -505,11 +506,9 @@
     }
     .split__image--dual img {
       width: 100%;
-      height: auto;
-      min-height: 120px;
-      max-height: 70vw;
-      object-fit: contain;
-      background: #111;
+      height: 45vw;
+      min-height: 170px;
+      object-fit: cover;
       flex: none;
     }
     .split__text {
